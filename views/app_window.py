@@ -8,7 +8,7 @@ class HospitalApp(tk.Tk):
         super().__init__()
         self.title("Hospital Management System") # set the title of the window
         # set the size of the window and the position of the window 
-        #width=650, height=550, x=600, y=250 px
+        #width=650, height=550, x=600, y=250
         self.geometry("580x550+600+250") 
         
         self.container = tk.Frame(self) # create a container frame to hold all the frames
