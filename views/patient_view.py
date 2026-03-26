@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from tkfontawesome import icon_to_image
 from controllers.data import doctors, patients, appointments
 from models.appointment import Appointment
 
@@ -61,7 +62,6 @@ class PatientView(tk.Frame):
         )
         frame_booking.pack(pady=10, fill="x", padx=20)
 
-        # Doctor selection
         frame_d = tk.Frame(frame_booking, bg="#F4F8FB")
         frame_d.pack(pady=5, fill="x")
 
@@ -79,7 +79,6 @@ class PatientView(tk.Frame):
         )
         self.doctor_dropdown.pack(side="left", fill="x", expand=True, padx=5)
 
-        # Time slots
         frame_t = tk.Frame(frame_booking, bg="#F4F8FB")
         frame_t.pack(pady=5, fill="x")
 
@@ -97,7 +96,6 @@ class PatientView(tk.Frame):
         )
         self.time_dropdown.pack(side="left", fill="x", expand=True, padx=5)
 
-        # Book Button
         btn_book = tk.Button(
             frame_booking,
             text="Book Appointment",
@@ -110,7 +108,6 @@ class PatientView(tk.Frame):
         )
         btn_book.pack(pady=15)
 
-        # ================= APPOINTMENTS LIST =================
         tk.Label(
             self,
             text="All Scheduled Appointments:",
@@ -122,27 +119,57 @@ class PatientView(tk.Frame):
         list_frame = tk.Frame(self, bg="#F4F8FB")
         list_frame.pack(fill="both", expand=True, padx=20, pady=5)
 
-        scrollbar = tk.Scrollbar(list_frame)
+        self.canvas = tk.Canvas(list_frame, bg="#F4F8FB", highlightthickness=0, height=150)
+        scrollbar = tk.Scrollbar(list_frame, orient="vertical", command=self.canvas.yview)
+        
+        self.scrollable_frame = tk.Frame(self.canvas, bg="#F4F8FB")
+        
+        self.scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            )
+        )
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw", tags="frame")
+        self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfig("frame", width=e.width))
+        
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+        
+        self.canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        self.appointments_listbox = tk.Listbox(
-            list_frame,
-            height=6,
-            yscrollcommand=scrollbar.set,
-            font=("Helvetica", 11),
-            bd=2,
-            relief="groove"
-        )
-        self.appointments_listbox.pack(side="left", fill="both", expand=True)
-        scrollbar.config(command=self.appointments_listbox.yview)
+        self.trash_icon = icon_to_image("trash", fill="#dc3545", scale_to_width=18)
+        
+        self.update_view()
 
-    # ================= FUNCTIONS =================
+
+    def delete_appointment(self, index):
+        appointments.pop(index)
+        self.update_view()
+        messagebox.showinfo("Success", "Appointment deleted successfully.")
 
     def update_view(self):
-        self.appointments_listbox.delete(0, tk.END)
-        for appt in appointments:
+        for widget in self.scrollable_frame.winfo_children():
+            widget.destroy()
+            
+        for i, appt in enumerate(appointments):
+            row_frame = tk.Frame(self.scrollable_frame, bg="white", bd=1, relief="ridge")
+            row_frame.pack(fill="x", pady=2, padx=2)
+            
             text = f"🗓️ {appt.time_slot} | Dr. {appt.doctor.name} ({appt.doctor.specialty}) <=> Patient: {appt.patient.name}"
-            self.appointments_listbox.insert(tk.END, text)
+            lbl = tk.Label(row_frame, text=text, font=("Helvetica", 11), bg="white", anchor="w")
+            lbl.pack(side="left", padx=10, pady=5)
+            
+            btn = tk.Button(
+                row_frame,
+                image=self.trash_icon,
+                bg="white",
+                activebackground="#f8d7da",
+                bd=0,
+                cursor="hand2",
+                command=lambda idx=i: self.delete_appointment(idx)
+            )
+            btn.pack(side="right", padx=10, pady=5)
 
     def book_appointment(self):
         d_name = self.doctor_var.get()
