@@ -45,7 +45,7 @@ class DoctorView(tk.Frame):
         self.patient_dropdown.grid(row=1, column=1, padx=10, pady=8)
         
         buttons_frame = tk.Frame(self)
-        buttons_frame.pack(pady=20)
+        buttons_frame.pack(pady=5)
         btn_view_record = tk.Button(
             buttons_frame,
             text="View Patient Medical Record",
@@ -56,7 +56,7 @@ class DoctorView(tk.Frame):
             width=30,
             command=self.view_record,
         )
-        btn_view_record.pack(side="left", pady=15, padx=10)
+        btn_view_record.pack(side="left", pady=5, padx=10)
 
         btn_back = tk.Button(
             buttons_frame,
@@ -67,7 +67,7 @@ class DoctorView(tk.Frame):
             activebackground="#5A6268",
             command=lambda: controller.show_frame("MainView")
         )
-        btn_back.pack(side="left", pady=15)
+        btn_back.pack(side="left", pady=5)
         
        
         tk.Label(

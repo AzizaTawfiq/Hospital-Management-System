@@ -57,7 +57,7 @@ class PatientView(tk.Frame):
             bg="#F4F8FB",
             fg="#1F3C88",
             padx=15,
-            pady=15
+            pady=5
         )
         frame_booking.pack(pady=10, fill="x", padx=20)
 
@@ -110,7 +110,6 @@ class PatientView(tk.Frame):
         )
         btn_book.pack(pady=15)
 
-        # ================= APPOINTMENTS LIST =================
         tk.Label(
             self,
             text="All Scheduled Appointments:",
@@ -136,7 +135,6 @@ class PatientView(tk.Frame):
         self.appointments_listbox.pack(side="left", fill="both", expand=True)
         scrollbar.config(command=self.appointments_listbox.yview)
 
-    # ================= FUNCTIONS =================
 
     def update_view(self):
         self.appointments_listbox.delete(0, tk.END)
