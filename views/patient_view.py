@@ -37,7 +37,6 @@ class PatientView(tk.Frame):
         )
         frame_booking.pack(pady=10, fill="x", padx=20)
 
-        # Doctor selection
         frame_d = tk.Frame(frame_booking, bg="#F4F8FB")
         frame_d.pack(pady=5, fill="x")
 
@@ -51,7 +50,6 @@ class PatientView(tk.Frame):
         )
         self.doctor_dropdown.pack(side="left", fill="x", expand=True, padx=5)
 
-        # Time slots
         frame_t = tk.Frame(frame_booking, bg="#F4F8FB")
         frame_t.pack(pady=5, fill="x")
 
@@ -68,7 +66,6 @@ class PatientView(tk.Frame):
         )
         self.time_dropdown.pack(side="left", fill="x", expand=True, padx=5)
 
-        # Book Button
         btn_book = tk.Button(
             frame_booking,
             text="Book Appointment",
