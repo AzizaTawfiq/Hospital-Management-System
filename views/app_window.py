@@ -2,10 +2,17 @@ import tkinter as tk
 from .main_view import MainView
 from .doctor_view import DoctorView
 from .patient_view import PatientView
+from .login_view import LoginView
+from .register_view import RegisterView
+from controllers.db import init_db
 
 class HospitalApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        # Initialize Database
+        init_db()
+        self.current_user = None
+
         self.title("Hospital Management System") # set the title of the window
         # set the size of the window and the position of the window 
         #width=650, height=550, x=600, y=250
@@ -16,7 +23,7 @@ class HospitalApp(tk.Tk):
         # create a dictionary to hold all the frames
         self.frames = {
             F.__name__: F(parent=self.container, controller=self)
-            for F in (MainView, DoctorView, PatientView)
+            for F in (MainView, DoctorView, PatientView, LoginView, RegisterView)
         }
          
         # place all the frames in the container
@@ -24,7 +31,7 @@ class HospitalApp(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew") 
 
         # show the default view when the app starts
-        self.show_frame("MainView") 
+        self.show_frame("LoginView") 
 
     # method to show a specific frame
     def show_frame(self, page_name):

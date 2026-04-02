@@ -1,2 +1,1 @@
-# Convert controllers folder into package
-from .data import doctors, patients, appointments
+from .db import init_db
